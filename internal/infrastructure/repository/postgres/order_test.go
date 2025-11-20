@@ -52,7 +52,7 @@ func TestOrderRepository_FindOne_Success(t *testing.T) {
 
 	mockDB.
 		EXPECT().
-		First(gomock.Any(), "id = ?", "1").
+		First(gomock.Any(), "id = ?", expected.Id).
 		DoAndReturn(func(dest interface{}, _ ...interface{}) *db.DBResult {
 			out := dest.(*order.Order)
 			*out = expected
@@ -69,6 +69,9 @@ func TestOrderRepository_FindOne_Success(t *testing.T) {
 	if result.Id != expected.Id {
 		t.Errorf("expected id %v, got %v", expected.Id, result.Id)
 	}
+	if result.Amount != expected.Amount {
+		t.Errorf("expected amount %v, got %v", expected.Amount, result.Amount)
+	}
 }
 
 func TestOrderRepository_FindOne_Error(t *testing.T) {
@@ -79,14 +82,19 @@ func TestOrderRepository_FindOne_Error(t *testing.T) {
 
 	mockDB.
 		EXPECT().
-		First(gomock.Any(), "id = ?", 99).
-		Return(&db.DBResult{Error: errors.New("record not found")})
+		First(gomock.Any(), "id = ?", uint64(99)).
+		DoAndReturn(func(dest interface{}, _ ...interface{}) *db.DBResult {
+			return &db.DBResult{Error: errors.New("record not found")}
+		})
 
 	repo := NewOrderRepository(mockDB)
 
 	_, err := repo.FindOne(99)
 	if err == nil {
 		t.Fatal("expected error, got nil")
+	}
+	if err.Error() != "record not found" {
+		t.Fatalf("expected 'record not found', got %v", err)
 	}
 }
 
