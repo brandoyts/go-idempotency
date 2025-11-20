@@ -78,7 +78,7 @@ func TestOrderService_GetOrderById_Success(t *testing.T) {
 
 	mockRepo.
 		EXPECT().
-		FindOne("1").
+		FindOne(uint64(1)).
 		Return(expected, nil)
 
 	svc := &OrderService{Repository: mockRepo}
@@ -105,12 +105,12 @@ func TestOrderService_GetOrderById_Error(t *testing.T) {
 
 	mockRepo.
 		EXPECT().
-		FindOne("42").
+		FindOne(uint64(1)).
 		Return(nil, errors.New("order not found"))
 
 	svc := &OrderService{Repository: mockRepo}
 
-	_, err := svc.Repository.FindOne(42)
+	_, err := svc.Repository.FindOne(1)
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
