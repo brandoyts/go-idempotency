@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "5239749e-6a3d-423c-be61-35284b1f6cd2",
+		"name": "Go Idempotency",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45707871",
+		"_collection_link": "https://brando-7607723.postman.co/workspace/Brando's-Workspace~97667d99-118a-49e3-8558-350dc7d93a2f/collection/45707871-5239749e-6a3d-423c-be61-35284b1f6cd2?action=share&source=collection_link&creator=45707871"
+	},
+	"item": [
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/health",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/orders",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Idempotency-Key",
+						"value": "55222",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 100.22\r\n}",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/orders/create",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"orders",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
